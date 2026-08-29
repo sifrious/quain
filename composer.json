@@ -1,6 +1,6 @@
 {
     "name": "quain/core",
-    "description": "Portable capability catalogue: reads skills, agents, and their folders, and inspects remote capability sources.",
+    "description": "Portable capability catalogue: versioned manifests, vocabulary references, skill/agent reads, and remote source inspection.",
     "type": "library",
     "license": "MIT",
     "require": {

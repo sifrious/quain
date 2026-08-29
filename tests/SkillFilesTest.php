@@ -5,7 +5,39 @@ use Quain\Core\SkillFiles;
 use Quain\Core\SkillRepository;
 
 beforeEach(function () {
-    $this->files = new SkillFiles(new SkillRepository($_SERVER['HOME'].'/.claude/skills'));
+    $this->skillsRoot = sys_get_temp_dir().'/quain-skill-files-'.uniqid();
+    mkdir($this->skillsRoot.'/citation-ledger/scripts', 0755, true);
+    file_put_contents(
+        $this->skillsRoot.'/citation-ledger/SKILL.md',
+        "---\nname: citation-ledger\ndescription: test fixture\n---\n\nbody\n",
+    );
+    file_put_contents(
+        $this->skillsRoot.'/citation-ledger/scripts/ledger_check.py',
+        "#!/usr/bin/env python3\nprint('ok')\n",
+    );
+
+    $this->files = new SkillFiles(new SkillRepository($this->skillsRoot));
+});
+
+afterEach(function () {
+    if (! isset($this->skillsRoot) || ! is_dir($this->skillsRoot)) {
+        return;
+    }
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($this->skillsRoot, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST,
+    );
+
+    foreach ($iterator as $entry) {
+        if (! $entry instanceof SplFileInfo) {
+            continue;
+        }
+
+        $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+    }
+
+    rmdir($this->skillsRoot);
 });
 
 it('finds the scripts inside a skill folder', function () {
