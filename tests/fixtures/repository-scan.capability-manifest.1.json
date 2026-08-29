@@ -1,0 +1,78 @@
+{
+    "id": "repository-scan",
+    "name": "Repository scan",
+    "version": "1",
+    "contractVersion": "quain.capability-manifest.1",
+    "inputs": [
+        {
+            "name": "path",
+            "type": "directory",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "inventory",
+            "type": "json",
+            "required": true
+        }
+    ],
+    "dependencies": [],
+    "readiness": [
+        {
+            "condition": "path-is-readable",
+            "required": true
+        }
+    ],
+    "parallelism": {
+        "allowed": true,
+        "max": 4
+    },
+    "approvals": [
+        {
+            "role": "operator",
+            "when": "before-run"
+        }
+    ],
+    "compatibility": [
+        {
+            "id": "posix-filesystem",
+            "range": ">=1"
+        }
+    ],
+    "exitCriteria": [
+        {
+            "statement": "An inventory of tracked files is produced without executing repository contents."
+        }
+    ],
+    "vocabulary": [
+        {
+            "kind": "algorithm",
+            "id": "landing:algorithms/directory-walk"
+        },
+        {
+            "kind": "architecture",
+            "id": "landing:architectures/capability-catalogue"
+        },
+        {
+            "kind": "data-structure",
+            "id": "landing:data-structures/path-tree"
+        },
+        {
+            "kind": "design-pattern",
+            "id": "landing:design-patterns/visitor"
+        },
+        {
+            "kind": "discipline",
+            "id": "landing:disciplines/software-construction"
+        },
+        {
+            "kind": "value",
+            "id": "landing:values/reproducible-composition"
+        },
+        {
+            "kind": "ideal",
+            "id": "landing:ideals/inspect-before-install"
+        }
+    ]
+}
