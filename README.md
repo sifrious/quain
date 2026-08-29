@@ -31,9 +31,9 @@ Honest mapping.
 | QUAIN-003 transitive dependency resolution | **This slice.** `DependencyOrder` is deterministic; missing dependencies and cycles are issues, not hidden control flow. |
 | QUAIN-004 compatibility and readiness validation | **Declared, not executed.** Manifests can name readiness and compatibility; nothing here selects or blocks a run. |
 | QUAIN-005 composition without hidden global behavior | **Partial.** Dependencies and parallelism are explicit on the manifest. No always-on composition engine. |
-| QUAIN-006 install and distribute signed bundles | **Partial, one half.** `SkillSource::inspect()` reports what a remote source offers without executing or installing it. No install, no signing, no verification. |
+| QUAIN-006 install and distribute signed bundles | **Partial, this slice adds verification/install without execution.** `CapabilityBundleVerifier`/`CapabilityBundleInstaller` verify identity, checksum, provenance, and manifest contracts; failures are data. Signing and trust policy are still out of scope. |
 | QUAIN-007 import Landing knowledge-catalog semantics | **Mapped, not migrated.** Seven Landing catalogue records become `VocabularyReference` kinds or stay Landing-only projections. Eloquent models, controllers, and browse UI are not copied. |
-| QUAIN-008 read-only capability catalogue for Orbis and Titan | **Partial.** A read-only catalogue exists, but only over Claude Code's on-disk layout, and no Orbis or Titan consumer exists to serve. |
+| QUAIN-008 read-only capability catalogue for Orbis and Titan | **Partial.** `CapabilityCatalog` now exposes read-only list/inspect/search/compatibility queries over canonical manifests. No Orbis/Titan integration endpoint is shipped here. |
 
 ## Consumer
 

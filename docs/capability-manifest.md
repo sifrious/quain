@@ -64,3 +64,39 @@ Stable Landing identities may be cited as `landing:{table}/{key}`. This package 
 `DependencyOrder::resolve()` returns a deterministic topological order. Ready nodes are always taken in identity order, so input array order cannot change the result.
 
 Missing required dependencies and cycles are issues on that result (`missing-dependency`, `cyclic-dependency`). They are not skipped, retried, or hidden in control flow. Optional missing dependencies are recorded as `missing-optional-dependency` and do not fail the resolution.
+
+## Bundle verification and install (MME-1176)
+
+`CapabilityBundleVerifier` and `CapabilityBundleInstaller` implement a minimal bundle flow that does not execute bundle contents.
+
+Bundle shape:
+
+- `bundle.json` descriptor with:
+  - `identity`
+  - `checksum` (bundle-level SHA-256 over verified capability checksums)
+  - `provenance` (`source`, optional `reference`, optional `capturedAt`)
+  - `capabilities[]` entries (`path`, optional `sha256`)
+- capability manifests stored as JSON files referenced by `capabilities[]`.
+
+Verification behavior:
+
+- Missing descriptor, missing files, checksum mismatch, invalid manifests, and unsupported contract versions are returned as issue data.
+- Unsupported contract failures preserve machine-readable reasons through `UnsupportedContract::toArray()`.
+- Verification returns identity, computed checksum, provenance, verified manifests, and issues.
+
+Install behavior:
+
+- Installation proceeds only when verification has no issues.
+- Installed manifests are copied as data into the target directory by capability identity.
+- No script, command, queue job, or provider runtime is invoked.
+
+## Read-only consumer queries (MME-1176)
+
+`CapabilityCatalog` offers read-only selection over canonical manifest definitions:
+
+- `all()` → list
+- `inspect(id)` → inspect one
+- `search(query)` → id/name/vocabulary search
+- `compatibleWith(id, range?)` → compatibility query
+
+The API exposes no mutation operations; queries do not alter stored manifest definitions.
