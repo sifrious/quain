@@ -16,6 +16,8 @@ AgentDefinition      an agent as data: name, trigger, model, tools, skills
 Frontmatter          YAML frontmatter parse and render, quoting only when required
 SkillSource          what a GitHub repo would add, and what it collides with
 GitHub               gh-CLI transport, so requests inherit existing auth
+ConceptReference     portable identity inside a versioned vocabulary scheme
+ConceptResolution    explicit availability, authorization, tombstone, and supersession outcomes
 ```
 
 Contract versioning and the Landing-vocabulary mapping live in [docs/capability-manifest.md](docs/capability-manifest.md).
@@ -32,7 +34,7 @@ Honest mapping.
 | QUAIN-004 compatibility and readiness validation | **Declared, not executed.** Manifests can name readiness and compatibility; nothing here selects or blocks a run. |
 | QUAIN-005 composition without hidden global behavior | **Partial.** Dependencies and parallelism are explicit on the manifest. No always-on composition engine. |
 | QUAIN-006 install and distribute signed bundles | **Partial, this slice adds verification/install without execution.** `CapabilityBundleVerifier`/`CapabilityBundleInstaller` verify identity, checksum, provenance, and manifest contracts; failures are data. Signing and trust policy are still out of scope. |
-| QUAIN-007 import Landing knowledge-catalog semantics | **Mapped, not migrated.** Seven Landing catalogue records become `VocabularyReference` kinds or stay Landing-only projections. Eloquent models, controllers, and browse UI are not copied. |
+| QUAIN-007 import Landing knowledge-catalog semantics | **Partial.** Seven Landing catalogue records map to `VocabularyReference` kinds; portable vocabulary schemes, durable concept references, display snapshots, and explicit resolution outcomes are implemented. Eloquent models, storage, controllers, and browse UI are not copied. |
 | QUAIN-008 read-only capability catalogue for Orbis and Titan | **Partial.** `CapabilityCatalog` now exposes read-only list/inspect/search/compatibility queries over canonical manifests. No Orbis/Titan integration endpoint is shipped here. |
 
 ## Consumer
