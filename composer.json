@@ -2,7 +2,7 @@
     "name": "quain/core",
     "description": "Portable capability catalogue: versioned manifests, vocabulary references, skill/agent reads, and remote source inspection.",
     "type": "library",
-    "license": "MIT",
+    "license": "proprietary",
     "require": {
         "php": "^8.3",
         "symfony/yaml": "^7.0|^8.0",
