@@ -11,11 +11,22 @@ class SkillFiles
 {
     public function __construct(private readonly SkillRepository $skills) {}
 
-    public function all(string $skill): array
+    public function all(string $skill, ?string $at = null): array
     {
-        $directory = $this->directory($skill);
+        $directory = $this->directory($skill, $at);
 
-        if ($directory === null) {
+        return $directory === null ? [] : $this->inDirectory($directory);
+    }
+
+    /**
+     * Files of one copy, addressed by where it is rather than what it is
+     * called. A forked name resolves to the wrong folder; a directory cannot.
+     *
+     * @return list<SkillFile>
+     */
+    public function inDirectory(string $directory): array
+    {
+        if (! is_dir($directory)) {
             return [];
         }
 
@@ -46,19 +57,20 @@ class SkillFiles
         return $files;
     }
 
-    public function scripts(string $skill): array
+    public function scripts(string $skill, ?string $at = null): array
     {
-        return array_values(array_filter($this->all($skill), fn (SkillFile $file) => $file->kind === 'script'));
+        return array_values(array_filter($this->all($skill, $at), fn (SkillFile $file) => $file->kind === 'script'));
     }
 
-    public function read(string $skill, string $path): ?string
+    public function read(string $skill, string $path, ?string $at = null): ?string
     {
-        $directory = $this->directory($skill);
+        $directory = $this->directory($skill, $at);
 
-        if ($directory === null) {
-            return null;
-        }
+        return $directory === null ? null : $this->readIn($directory, $path);
+    }
 
+    public function readIn(string $directory, string $path): ?string
+    {
         $resolved = realpath($directory.'/'.$path);
 
         if ($resolved === false || ! str_starts_with($resolved, $directory.'/') || ! is_file($resolved)) {
@@ -68,11 +80,29 @@ class SkillFiles
         return file_get_contents($resolved);
     }
 
-    public function directory(string $skill): ?string
+    /**
+     * `$at` picks one copy of a skill that exists in several places; without
+     * it the primary copy answers, which is the library's when there is one.
+     */
+    public function directory(string $skill, ?string $at = null): ?string
     {
         $found = $this->skills->find($skill);
 
-        return $found ? dirname($found->path) : null;
+        if ($found === null) {
+            return null;
+        }
+
+        if ($at === null) {
+            return dirname($found->path);
+        }
+
+        foreach ($found->occurrences as $occurrence) {
+            if ($occurrence->directory === $at) {
+                return $occurrence->directory;
+            }
+        }
+
+        return null;
     }
 
     private function classify(string $relative): string

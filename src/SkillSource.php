@@ -15,7 +15,7 @@ class SkillSource
         $tree = $this->github->get('repos/'.$repo.'/git/trees/'.$meta['default_branch'].'?recursive=1');
 
         $offered = $this->offered($tree['tree'] ?? [], $repo);
-        $installed = $this->skills->names();
+        $installed = $this->skills->installed();
         $collisions = array_values(array_intersect($offered, $installed));
 
         return [

@@ -41,28 +41,6 @@ function makeBundleFixture(array $manifestOverrides = [], ?string $manifestCheck
     return $root;
 }
 
-function removeTree(string $root): void
-{
-    if (! is_dir($root)) {
-        return;
-    }
-
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($root, RecursiveDirectoryIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::CHILD_FIRST,
-    );
-
-    foreach ($iterator as $entry) {
-        if (! $entry instanceof SplFileInfo) {
-            continue;
-        }
-
-        $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
-    }
-
-    rmdir($root);
-}
-
 it('verifies identity checksum provenance and manifest contract without executing bundle contents', function () {
     $bundle = makeBundleFixture();
     $verification = (new CapabilityBundleVerifier())->verify($bundle);

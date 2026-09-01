@@ -28,7 +28,7 @@ Unknown keys on a supported contract are ignored. That is how additive fields st
 
 ## Versioning convention (MME-1222)
 
-`PublishedContracts` is the catalog consumers such as Orbis, Titan, Wardrobe, Logres, and Burdgeon can query. A later catalog entry does not require those packages to release together.
+`PublishedContracts` is the catalog consumers such as Orbis, Titan, Wardrobe, Logres, and Burdgen can query. A later catalog entry does not require those packages to release together.
 
 | Kind | Rule | Example |
 | --- | --- | --- |
